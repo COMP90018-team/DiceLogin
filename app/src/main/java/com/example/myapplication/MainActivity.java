@@ -10,10 +10,10 @@ import android.widget.Spinner;
 import android.widget.Button;
 import android.content.Intent;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     public String[] numList = new String[]{"1","2","3","4","5","6"};
-    Button startButton;
+//    Button startButton;
     private String selectParameter = "1";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,15 +34,45 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        startButton = findViewById(R.id.start_button);
-        startButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
+
+
+//        startButton = (Button) findViewById(R.id.start_button);
+//        startButton.setOnClickListener(this);
+//
+
+//        startButton.setOnClickListener(new View.OnClickListener()){
+//            @Override
+//            public void onClick(View v){
+//                System.out.println("Clicked!");
+//                Intent intent = new Intent(MainActivity.this,DiceGameActivity.class);
+//                intent.putExtra("selectParameter",selectParameter);
+//                startActivity(intent);
+//            }
+//        });
+
+        Button startButton = (Button) findViewById(R.id.start_button);
+        startButton.setOnClickListener(this); // calling onClick() method
+        Button settingButton = (Button) findViewById(R.id.setting_btn);
+        settingButton.setOnClickListener(this);
+        }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.start_button:
+                // do your code
                 System.out.println("Clicked!");
                 Intent intent = new Intent(MainActivity.this,DiceGameActivity.class);
                 intent.putExtra("selectParameter",selectParameter);
                 startActivity(intent);
-            }
-        });
+                break;
+            case R.id.setting_btn:
+                // do your code
+                System.out.println("setting Clicked!");
+                break;
+            default:
+                break;
+        }
     }
 }
+
