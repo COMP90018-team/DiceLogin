@@ -69,6 +69,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.setting_btn:
                 // do your code
                 System.out.println("setting Clicked!");
+                Intent intent2 = new Intent(MainActivity.this,SettingsActivity.class);
+                startActivity(intent2);
                 break;
             default:
                 break;
