@@ -1,8 +1,15 @@
 package com.example.myapplication;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -13,8 +20,13 @@ import android.content.Intent;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     public String[] numList = new String[]{"1","2","3","4","5","6"};
+    public boolean soundAble = true;
+    public boolean vibrationSensor = true;
+    public boolean lightSensor = true;
 //    Button startButton;
     private String selectParameter = "1";
+    Intent intent;
+    ActivityResultLauncher<Intent> someActivityResultLauncher;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,25 +48,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
-//        startButton = (Button) findViewById(R.id.start_button);
-//        startButton.setOnClickListener(this);
-//
-
-//        startButton.setOnClickListener(new View.OnClickListener()){
-//            @Override
-//            public void onClick(View v){
-//                System.out.println("Clicked!");
-//                Intent intent = new Intent(MainActivity.this,DiceGameActivity.class);
-//                intent.putExtra("selectParameter",selectParameter);
-//                startActivity(intent);
-//            }
-//        });
-
         Button startButton = (Button) findViewById(R.id.start_button);
         startButton.setOnClickListener(this); // calling onClick() method
         Button settingButton = (Button) findViewById(R.id.setting_btn);
         settingButton.setOnClickListener(this);
+
+
+        someActivityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                 result -> {
+                         // There are no request codes
+                         Log.i("TEST", "Testing RESULT back");
+                         Intent data = result.getData();
+                         Bundle extras = data.getExtras();
+                         if (extras != null) {
+                             soundAble = extras.getBoolean("soundAble");
+                             vibrationSensor = extras.getBoolean("vibrationSensor");
+                             lightSensor = extras.getBoolean("lightSensor");
+                             Log.i("TEST", "Testing" + Boolean.toString(soundAble));
+                         }
+                     }
+
+                );
+
         }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode,resultCode,data);
+
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -64,14 +88,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 System.out.println("Clicked!");
                 Intent intent = new Intent(MainActivity.this,DiceGameActivity.class);
                 intent.putExtra("selectParameter",selectParameter);
+                intent.putExtra("lightSensor",lightSensor);
+                intent.putExtra("vibrationSensor",vibrationSensor);
+                intent.putExtra("soundAble",soundAble);
                 startActivity(intent);
                 break;
             case R.id.setting_btn:
                 // do your code
                 System.out.println("setting Clicked!");
-                Intent intent2 = new Intent(MainActivity.this,SettingsActivity.class);
-                startActivity(intent2);
+                intent = new Intent(MainActivity.this,SettingsActivity.class);
+                intent.putExtra("lightSensor",lightSensor);
+                intent.putExtra("vibrationSensor",vibrationSensor);
+                intent.putExtra("soundAble",soundAble);
+                someActivityResultLauncher.launch(intent);
                 break;
+
             default:
                 break;
         }

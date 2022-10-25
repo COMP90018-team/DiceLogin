@@ -1,8 +1,16 @@
 package com.example.myapplication;
 
+import static androidx.fragment.app.FragmentManager.TAG;
+
 import androidx.appcompat.app.AppCompatActivity;
 
+import androidx.appcompat.app.AlertDialog;
+import android.content.Context;
+import android.hardware.SensorEvent;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.ViewGroup.MarginLayoutParams;
@@ -10,12 +18,33 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.graphics.Typeface;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import android.util.Log;
+import android.content.DialogInterface;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Random;
 
 public class DiceGameActivity extends AppCompatActivity {
+//    sensor listener
+    ShakeListener mShakeListener = null;
+    TemperatureListener mTemperatureListener = null;
+    LightListener mLightListener = null;
+    Vibrator vibrator = null;
+    SoundPool soundPool = null;
+
+//    设置的switch button value
+    boolean soundAble ;
+    boolean vibrationSensor;
+    boolean lightSensor ;
+
+    ImageView diceCupImg;
+    Button btnOpen;
+
+
     String selectParameter;
     Map<String, Integer> currentResultMap;
     Boolean is_cover = true;
@@ -36,9 +65,41 @@ public class DiceGameActivity extends AppCompatActivity {
     ArrayList<Integer> imgBlkTopList = new ArrayList<>();
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            soundAble = extras.getBoolean("soundAble");
+            vibrationSensor = extras.getBoolean("vibrationSensor");
+            lightSensor = extras.getBoolean("lightSensor");
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mShakeListener.stop();
+        mLightListener.stop();
+        mTemperatureListener.stop();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dice_game);
+
+//        set listener
+        mShakeListener = new ShakeListener(this);
+        mShakeListener.setOnShakeListener(new shakeLitener());
+
+        mTemperatureListener = new TemperatureListener(this);
+        mTemperatureListener.setOnTemperatureListener(new temperatureLitener());
+
+        mLightListener = new LightListener(this);
+        mLightListener.setOnLightListener(new lightChangeListener());
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        soundPool = new SoundPool(10, AudioManager.STREAM_SYSTEM,5);
+        soundPool.load(this,R.raw.shakesound,1);
 
         for (int imgBlk: imgBlkList){
             MarginLayoutParams imgBlkPara = (MarginLayoutParams) findViewById(imgBlk).getLayoutParams();
@@ -53,8 +114,8 @@ public class DiceGameActivity extends AppCompatActivity {
         showNumDices.setText("Playing with " + selectParameter + " Dices");
         currentResultMap = rollDice();
 
-        ImageView diceCupImg = findViewById(R.id.imageDiceCup);
-        Button btnOpen = findViewById(R.id.open_btn);
+        diceCupImg = findViewById(R.id.imageDiceCup);
+        btnOpen = findViewById(R.id.open_btn);
         btnOpen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,6 +145,8 @@ public class DiceGameActivity extends AppCompatActivity {
                 diceCupImg.setImageAlpha(255);
                 btnOpen.setText(R.string.open_button);
                 currentResultMap = rollDice();
+                vibrator.vibrate(250);
+                soundPool.play(1,1, 1, 0, 0, 1);
             }
         });
 
@@ -156,5 +219,68 @@ public class DiceGameActivity extends AppCompatActivity {
         }
         // displayStat(resultMap);
         return resultMap;
+    }
+
+
+
+//加速器接口方法
+    private class shakeLitener implements ShakeListener.OnShakeListener {
+        @Override
+        public void AfterShake() {
+            // TODO Auto-generated method stub
+            currentResultMap = rollDice();
+//            soundPool.pause(1);
+        }
+        public void StartShake() {
+            // TODO Auto-generated method stub
+//            tv.setText("开始摇一摇");
+            if(soundAble){
+                soundPool.play(1,1, 1, 0, 0, 1);
+            }
+
+            is_cover = true;
+            hideTextView();
+            diceCupImg.setImageAlpha(255);
+            btnOpen.setText(R.string.open_button);
+        }
+
+        public void OnShaking() {
+            // TODO Auto-generated method stub
+//            tv.setText("摇一摇中！");
+            if( vibrationSensor){
+                vibrator.vibrate(250);
+            }
+
+
+        }
+    }
+//温度senor接口方法
+    private class temperatureLitener implements TemperatureListener.TemperatureChangeListener {
+        @Override
+        public void ChangeTemperature(float temp) {
+//            temperaturetextView.setText("temperature:" + temp + "℃");
+            Toast.makeText(DiceGameActivity.this, "Temperature is too high.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    //亮度senor接口方法
+    private class lightChangeListener implements LightListener.LightChangeListener{
+
+        @Override
+        public void ChangeLight(SensorEvent temp) {
+            float acc = temp.accuracy;
+            float lux = temp.values[0];
+//            if lightSensor:
+    //            lightTV.setText("acc:"+acc+";"+"lux："+lux);
+    //            亮度大于100 白天模式 亮度小于100夜间模式
+    //            if lux>100:
+    //
+    //            else:
+
+
+
+
+
+        }
     }
 }

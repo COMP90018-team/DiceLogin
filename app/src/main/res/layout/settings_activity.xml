@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/shock"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center_vertical"
@@ -15,7 +16,7 @@
         android:layout_height="50dp"
         android:background="@mipmap/ic_back"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- 开关列表 -->
     <LinearLayout
@@ -26,40 +27,52 @@
 
         <!--        光感开关         -->
         <Switch
-            android:id="@+id/autoLightS"
+            android:id="@+id/light"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
-            android:text="Auto Light Sensing"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="20dp"
+            android:checked="true"
             android:fontFamily="@font/chunkfiveregular"
+            android:text="Auto Light Sensing"
             android:textColor="@color/cream_300"
             android:textSize="18sp"
-            android:layout_marginHorizontal="20dp"
             android:thumb="@drawable/thumb"
-            android:track="@drawable/track"
-            android:checked="true"
-            android:layout_marginVertical="20dp" />
+            android:track="@drawable/track" />
 
         <Switch
-            android:id="@+id/soundS"
+            android:id="@+id/vibration"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
-            android:text="Sound Sennsing"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="20dp"
+            android:checked="true"
             android:fontFamily="@font/chunkfiveregular"
+            android:text="Vibration"
             android:textColor="@color/cream_300"
             android:textSize="18sp"
-            android:layout_marginHorizontal="20dp"
             android:thumb="@drawable/thumb"
-            android:track="@drawable/track"
-            android:checked="true"
-            android:layout_marginVertical="20dp" />
+            android:track="@drawable/track" />
 
+        <Switch
+            android:id="@+id/sound"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="20dp"
+            android:checked="true"
+            android:fontFamily="@font/chunkfiveregular"
+            android:text="Sound"
+            android:textColor="@color/cream_300"
+            android:textSize="18sp"
+            android:thumb="@drawable/thumb"
+            android:track="@drawable/track" />
 
 
     </LinearLayout>
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
