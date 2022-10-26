@@ -60,8 +60,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                          // There are no request codes
                          Log.i("TEST", "Testing RESULT back");
                          Intent data = result.getData();
-                         Bundle extras = data.getExtras();
-                         if (extras != null) {
+//                         Bundle extras = data.getExtras();
+                         if (data != null) {
+                             // _______________________新_____________________________
+                             Bundle extras = data.getExtras();
+                             //______________________________________________________
                              soundAble = extras.getBoolean("soundAble");
                              vibrationSensor = extras.getBoolean("vibrationSensor");
                              lightSensor = extras.getBoolean("lightSensor");
