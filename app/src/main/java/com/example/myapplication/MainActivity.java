@@ -1,114 +1,78 @@
 package com.example.myapplication;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.Nullable;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.widget.Button;
 import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
-    public String[] numList = new String[]{"1","2","3","4","5","6"};
-    public boolean soundAble = true;
-    public boolean vibrationSensor = true;
-    public boolean lightSensor = true;
-//    Button startButton;
-    private String selectParameter = "1";
-    Intent intent;
-    ActivityResultLauncher<Intent> someActivityResultLauncher;
+import org.w3c.dom.Text;
+
+public class MainActivity extends AppCompatActivity {
+
+    private FirebaseAuth mAuth;
+    EditText account, password;
+    Button login, register;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Spinner spinner = findViewById(R.id.spinner_dicenum);//初始化控件
-        ArrayAdapter<String>adapter= new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,numList);//建立Adapter并且绑定数据源
-//第一个参数表示在哪个Activity上显示，第二个参数是系统下拉框的样式，第三个参数是数组。
-        spinner.setAdapter(adapter);//绑定Adapter到控件
-        //监听spinner选中的参数并赋值，通过intent进行传参至下一个页面
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+        mAuth = FirebaseAuth.getInstance();
+
+        account = (EditText) findViewById(R.id.account);
+        password = (EditText) findViewById(R.id.password);
+        login = (Button) findViewById(R.id.btnLogin);
+        register = (Button) findViewById(R.id.btnRegister);
+
+        login.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectParameter = numList[position];
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+            public void onClick(View v) {
+                String user = account.getText().toString().trim();
+                String key = password.getText().toString().trim();
+                if(user.equals("")||key.equals("")){
+                    Toast.makeText(MainActivity.this, "All fields required", Toast.LENGTH_SHORT).show();
+                    account.requestFocus();
+                    return;
+                }
+                mAuth.signInWithEmailAndPassword(user, key).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(task.isSuccessful()){
+                            // Intent intent = new Intent(getApplication(), nextActivity.class);
+                            // startActivity(intent);
+                            Intent intent =new Intent(getApplicationContext(),Home.class);
+                            startActivity(intent);
+                            Toast.makeText(MainActivity.this, "Successfully login.", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(MainActivity.this, "Login failed, please check your input and try it again.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+
+
             }
         });
 
-
-
-        Button startButton = (Button) findViewById(R.id.start_button);
-        startButton.setOnClickListener(this); // calling onClick() method
-        Button settingButton = (Button) findViewById(R.id.setting_btn);
-        settingButton.setOnClickListener(this);
-
-
-        someActivityResultLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                 result -> {
-                         // There are no request codes
-                         Log.i("TEST", "Testing RESULT back");
-                         Intent data = result.getData();
-//                         Bundle extras = data.getExtras();
-                         if (data != null) {
-                             // _______________________新_____________________________
-                             Bundle extras = data.getExtras();
-                             //______________________________________________________
-                             soundAble = extras.getBoolean("soundAble");
-                             vibrationSensor = extras.getBoolean("vibrationSensor");
-                             lightSensor = extras.getBoolean("lightSensor");
-                             Log.i("TEST", "Testing" + Boolean.toString(soundAble));
-                         }
-                     }
-
-                );
-
-        }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode,resultCode,data);
-
-    }
-
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.start_button:
-                // do your code
-                System.out.println("Clicked!");
-                Intent intent = new Intent(MainActivity.this,DiceGameActivity.class);
-                intent.putExtra("selectParameter",selectParameter);
-                intent.putExtra("lightSensor",lightSensor);
-                intent.putExtra("vibrationSensor",vibrationSensor);
-                intent.putExtra("soundAble",soundAble);
+        register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent =new Intent(getApplicationContext(),RegisterUI.class);
                 startActivity(intent);
-                break;
-            case R.id.setting_btn:
-                // do your code
-                System.out.println("setting Clicked!");
-                intent = new Intent(MainActivity.this,SettingsActivity.class);
-                intent.putExtra("lightSensor",lightSensor);
-                intent.putExtra("vibrationSensor",vibrationSensor);
-                intent.putExtra("soundAble",soundAble);
-                someActivityResultLauncher.launch(intent);
-                break;
+            }
+        });
 
-            default:
-                break;
-        }
     }
 }
-
