@@ -273,7 +273,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="50dp"
-            android:src="@drawable/dicecup_img_trans" />
+            android:src="@drawable/cup2" />
 
         <!--        <TextView-->
         <!--            android:id="@+id/shake_instruction"-->
