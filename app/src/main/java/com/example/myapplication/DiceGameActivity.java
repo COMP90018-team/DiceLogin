@@ -145,8 +145,10 @@ public class DiceGameActivity extends AppCompatActivity {
                 diceCupImg.setImageAlpha(255);
                 btnOpen.setText(R.string.open_button);
                 currentResultMap = rollDice();
-                vibrator.vibrate(250);
-                soundPool.play(1,1, 1, 0, 0, 1);
+                if(vibrationSensor)
+                    vibrator.vibrate(250);
+                if(soundAble)
+                    soundPool.play(1,1, 1, 0, 0, 1);
             }
         });
 
