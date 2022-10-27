@@ -9,5 +9,8 @@ public class UserInfo {
         this.username = username;
         this.email = email;
     }
+    public String getUsername(){
+        return this.username;
+    }
 
 }
