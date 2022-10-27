@@ -17,26 +17,29 @@ import android.view.ViewGroup.MarginLayoutParams;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.RelativeLayout;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import android.graphics.Typeface;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.content.DialogInterface;
 import android.widget.Toast;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Random;
 
 public class DiceGameActivity extends AppCompatActivity {
-//    sensor listener
+    //    sensor listener
     ShakeListener mShakeListener = null;
     TemperatureListener mTemperatureListener = null;
     LightListener mLightListener = null;
     Vibrator vibrator = null;
     SoundPool soundPool = null;
 
-//    设置的switch button value
+    //    设置的switch button value
     boolean soundAble ;
     boolean vibrationSensor;
     boolean lightSensor ;
@@ -115,6 +118,7 @@ public class DiceGameActivity extends AppCompatActivity {
         currentResultMap = rollDice();
 
         diceCupImg = findViewById(R.id.imageDiceCup);
+//        TextView diceCupText = findViewById(R.id.shake_instruction);
         btnOpen = findViewById(R.id.open_btn);
         btnOpen.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,6 +126,7 @@ public class DiceGameActivity extends AppCompatActivity {
                 if (is_cover) {
                     displayStat(currentResultMap);
                     diceCupImg.setImageAlpha(0);
+//                    diceCupText.setVisibility(View.INVISIBLE);
                     btnOpen.setText(R.string.cover_button);
                     is_cover = false;
                 }
@@ -129,6 +134,7 @@ public class DiceGameActivity extends AppCompatActivity {
                 else {
                     hideTextView();
                     diceCupImg.setImageAlpha(255);
+//                    diceCupText.setVisibility(View.VISIBLE);
                     btnOpen.setText(R.string.open_button);
                     is_cover = true;
                 }
@@ -143,6 +149,7 @@ public class DiceGameActivity extends AppCompatActivity {
                 is_cover = true;
                 hideTextView();
                 diceCupImg.setImageAlpha(255);
+//                diceCupText.setVisibility(View.VISIBLE);
                 btnOpen.setText(R.string.open_button);
                 currentResultMap = rollDice();
                 if(vibrationSensor)
@@ -154,7 +161,7 @@ public class DiceGameActivity extends AppCompatActivity {
 
         Button btnBack = findViewById(R.id.btn_back);
         btnBack.setOnClickListener(v ->
-            finish()
+                finish()
         );
     }
 
@@ -225,7 +232,7 @@ public class DiceGameActivity extends AppCompatActivity {
 
 
 
-//加速器接口方法
+    //加速器接口方法
     private class shakeLitener implements ShakeListener.OnShakeListener {
         @Override
         public void AfterShake() {
@@ -256,7 +263,7 @@ public class DiceGameActivity extends AppCompatActivity {
 
         }
     }
-//温度senor接口方法
+    //温度senor接口方法
     private class temperatureLitener implements TemperatureListener.TemperatureChangeListener {
         @Override
         public void ChangeTemperature(float temp) {
@@ -267,17 +274,71 @@ public class DiceGameActivity extends AppCompatActivity {
 
     //亮度senor接口方法
     private class lightChangeListener implements LightListener.LightChangeListener{
+        ConstraintLayout DiceGameLayout = findViewById(R.id.dicegame_layout);
 
         @Override
         public void ChangeLight(SensorEvent temp) {
             float acc = temp.accuracy;
             float lux = temp.values[0];
+            try{
+                if(lux>=100){
+                    getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    DiceGameLayout.setBackgroundResource(R.color.cream_000);
+                    for (Integer textid : TextBlkList){
+                        TextView SubStat = findViewById(textid);
+                        String a = SubStat.getText().toString();
+                        char last = a.charAt(a.length()-1);
+                        if (last == '0'){
+                            SubStat.setTextColor(getResources().getColor(R.color.cream_100));
+                        }
+                        else{
+                            SubStat.setTextColor(getResources().getColor(R.color.cream_200));
+                        }
+
+                    }
+
+//                   recreate();
+
+
+
+                }
+
+                else{
+                    getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    DiceGameLayout.setBackgroundResource(R.color.blue_700);
+                    for (Integer textid : TextBlkList){
+                        TextView SubStat = findViewById(textid);
+                        String a = SubStat.getText().toString();
+                        char last = a.charAt(a.length()-1);
+                        if (last == '0'){
+                            SubStat.setTextColor(getResources().getColor(R.color.blue_500));
+                        }
+                        else{
+                            SubStat.setTextColor(getResources().getColor(R.color.blue_100));
+                        }
+                    }
+
+//                    recreate();
+
+
+                }
+
+            } catch(Exception e){
+
+            }
+
+
+
+
+
+
+
 //            if lightSensor:
-    //            lightTV.setText("acc:"+acc+";"+"lux："+lux);
-    //            亮度大于100 白天模式 亮度小于100夜间模式
-    //            if lux>100:
-    //
-    //            else:
+            //            lightTV.setText("acc:"+acc+";"+"lux："+lux);
+            //            亮度大于100 白天模式 亮度小于100夜间模式
+            //            if lux>100:
+            //
+            //            else:
 
 
 

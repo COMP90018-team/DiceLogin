@@ -6,8 +6,11 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.app.Activity;
+import android.hardware.SensorEvent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,8 +19,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Button;
 import android.content.Intent;
+import android.widget.TextView;
 
 public class Home extends AppCompatActivity implements View.OnClickListener{
+
+    LightListener mLightListener = null;
 
     public String[] numList = new String[]{"1","2","3","4","5","6"};
     public boolean soundAble = true;
@@ -31,6 +37,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        mLightListener = new LightListener(this);
+        mLightListener.setOnLightListener(new Home.lightChangeListener());
+
         Spinner spinner = findViewById(R.id.spinner_dicenum);//初始化控件
         ArrayAdapter<String>adapter= new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,numList);//建立Adapter并且绑定数据源
 //第一个参数表示在哪个Activity上显示，第二个参数是系统下拉框的样式，第三个参数是数组。
@@ -110,5 +120,29 @@ public class Home extends AppCompatActivity implements View.OnClickListener{
                 break;
         }
     }
-}
 
+    private class lightChangeListener implements LightListener.LightChangeListener {
+        ConstraintLayout HomeLayout = findViewById(R.id.home_layout);
+        @Override
+        public void ChangeLight(SensorEvent temp) {
+            float acc = temp.accuracy;
+            float lux = temp.values[0];
+            try {
+                if (lux >= 100) {
+                    getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    HomeLayout.setBackgroundResource(R.color.cream_000);
+
+//                   recreate();
+
+                } else {
+                    getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    HomeLayout.setBackgroundResource(R.color.blue_700);
+
+//                    recreate();
+                }
+            } catch (Exception e) {
+            }
+
+        }
+    }
+}

@@ -4,12 +4,14 @@
 package com.example.myapplication;
 
 import android.content.Intent;
+import android.hardware.SensorEvent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -17,9 +19,12 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 public class SettingsActivity extends AppCompatActivity {
+    LightListener mLightListener = null;
 
     public boolean soundAble;
     public boolean vibrationSensor;
@@ -40,6 +45,9 @@ public class SettingsActivity extends AppCompatActivity {
 //        if (actionBar != null) {
 //            actionBar.setDisplayHomeAsUpEnabled(true);
 //        }
+
+        mLightListener = new LightListener(this);
+        mLightListener.setOnLightListener(new SettingsActivity.lightChangeListener());
 
         //光感开关检查
         Switch lightS = findViewById(R.id.light);
@@ -107,6 +115,38 @@ public class SettingsActivity extends AppCompatActivity {
                     finish();
                 }
         );
+    }
+    private class lightChangeListener implements LightListener.LightChangeListener {
+        ConstraintLayout SettingsLayout = findViewById(R.id.shock);
+        TextView lightSwitch = findViewById(R.id.light);
+        TextView vibrationSwitch = findViewById(R.id.vibration);
+        TextView soundSwitch = findViewById(R.id.sound);
+        @Override
+        public void ChangeLight(SensorEvent temp) {
+            float acc = temp.accuracy;
+            float lux = temp.values[0];
+            try {
+                if (lux >= 100) {
+                    getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    SettingsLayout.setBackgroundResource(R.color.cream_300);
+                    lightSwitch.setTextColor(getResources().getColor(R.color.cream_300));
+                    vibrationSwitch.setTextColor(getResources().getColor(R.color.cream_300));
+                    soundSwitch.setTextColor(getResources().getColor(R.color.cream_300));
+//                   recreate();
+
+                } else {
+                    getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    SettingsLayout.setBackgroundResource(R.color.blue_700);
+                    lightSwitch.setTextColor(getResources().getColor(R.color.blue_100));
+                    vibrationSwitch.setTextColor(getResources().getColor(R.color.blue_100));
+                    soundSwitch.setTextColor(getResources().getColor(R.color.blue_100));
+
+//                    recreate();
+                }
+            } catch (Exception e) {
+            }
+
+        }
     }
 
 }
