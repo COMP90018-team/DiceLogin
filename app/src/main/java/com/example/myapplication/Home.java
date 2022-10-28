@@ -33,6 +33,19 @@ public class Home extends AppCompatActivity implements View.OnClickListener{
     private String selectParameter = "1";
     Intent intent;
     ActivityResultLauncher<Intent> someActivityResultLauncher;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.i("test", "Tess onStart: "+Integer.toString(getDelegate().getLocalNightMode()));
+//        if(getDelegate().getLocalNightMode() == AppCompatDelegate.MODE_NIGHT_YES){
+//            if(lightSensor==false){
+//                getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+//                findViewById(R.id.home_layout).setBackgroundResource(R.color.cream_000);
+//            }
+//        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +91,12 @@ public class Home extends AppCompatActivity implements View.OnClickListener{
                         soundAble = extras.getBoolean("soundAble");
                         vibrationSensor = extras.getBoolean("vibrationSensor");
                         lightSensor = extras.getBoolean("lightSensor");
+                        Log.i("INFORMATION", "Tess LightSensor is "+Boolean.toString(lightSensor));
+                        if (lightSensor == false){
+                            mLightListener.stop();
+                        }else{
+                            mLightListener.start();
+                        }
                         Log.i("TEST", "Testing" + Boolean.toString(soundAble));
                     }
                 }
@@ -128,18 +147,18 @@ public class Home extends AppCompatActivity implements View.OnClickListener{
             float acc = temp.accuracy;
             float lux = temp.values[0];
             try {
-                if (lux >= 100) {
-                    getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    HomeLayout.setBackgroundResource(R.color.cream_000);
+                    if (lux >= 100) {
+                        getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                        HomeLayout.setBackgroundResource(R.color.cream_000);
 
 //                   recreate();
 
-                } else {
-                    getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    HomeLayout.setBackgroundResource(R.color.blue_700);
+                    } else {
+                        getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                        HomeLayout.setBackgroundResource(R.color.blue_700);
 
 //                    recreate();
-                }
+                    }
             } catch (Exception e) {
             }
 

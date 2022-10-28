@@ -75,6 +75,11 @@ public class DiceGameActivity extends AppCompatActivity {
             soundAble = extras.getBoolean("soundAble");
             vibrationSensor = extras.getBoolean("vibrationSensor");
             lightSensor = extras.getBoolean("lightSensor");
+            if (lightSensor==false){
+                mLightListener.stop();
+            }else{
+                mLightListener.start();
+            }
         }
     }
 
@@ -100,6 +105,7 @@ public class DiceGameActivity extends AppCompatActivity {
 
         mLightListener = new LightListener(this);
         mLightListener.setOnLightListener(new lightChangeListener());
+
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         soundPool = new SoundPool(10, AudioManager.STREAM_SYSTEM,5);
         soundPool.load(this,R.raw.shakesound,1);
@@ -281,48 +287,44 @@ public class DiceGameActivity extends AppCompatActivity {
             float acc = temp.accuracy;
             float lux = temp.values[0];
             try{
-                if(lux>=100){
-                    getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    DiceGameLayout.setBackgroundResource(R.color.cream_000);
-                    for (Integer textid : TextBlkList){
-                        TextView SubStat = findViewById(textid);
-                        String a = SubStat.getText().toString();
-                        char last = a.charAt(a.length()-1);
-                        if (last == '0'){
-                            SubStat.setTextColor(getResources().getColor(R.color.cream_100));
-                        }
-                        else{
-                            SubStat.setTextColor(getResources().getColor(R.color.cream_200));
-                        }
+                if (lightSensor) {
+                    if (lux >= 100) {
+                        getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                        DiceGameLayout.setBackgroundResource(R.color.cream_000);
+                        for (Integer textid : TextBlkList) {
+                            TextView SubStat = findViewById(textid);
+                            String a = SubStat.getText().toString();
+                            char last = a.charAt(a.length() - 1);
+                            if (last == '0') {
+                                SubStat.setTextColor(getResources().getColor(R.color.cream_100));
+                            } else {
+                                SubStat.setTextColor(getResources().getColor(R.color.cream_200));
+                            }
 
-                    }
+                        }
 
 //                   recreate();
 
 
-
-                }
-
-                else{
-                    getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    DiceGameLayout.setBackgroundResource(R.color.blue_700);
-                    for (Integer textid : TextBlkList){
-                        TextView SubStat = findViewById(textid);
-                        String a = SubStat.getText().toString();
-                        char last = a.charAt(a.length()-1);
-                        if (last == '0'){
-                            SubStat.setTextColor(getResources().getColor(R.color.blue_500));
+                    } else {
+                        getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                        DiceGameLayout.setBackgroundResource(R.color.blue_700);
+                        for (Integer textid : TextBlkList) {
+                            TextView SubStat = findViewById(textid);
+                            String a = SubStat.getText().toString();
+                            char last = a.charAt(a.length() - 1);
+                            if (last == '0') {
+                                SubStat.setTextColor(getResources().getColor(R.color.blue_500));
+                            } else {
+                                SubStat.setTextColor(getResources().getColor(R.color.blue_100));
+                            }
                         }
-                        else{
-                            SubStat.setTextColor(getResources().getColor(R.color.blue_100));
-                        }
-                    }
 
 //                    recreate();
 
 
+                    }
                 }
-
             } catch(Exception e){
 
             }

@@ -54,6 +54,11 @@ public class SettingsActivity extends AppCompatActivity {
         lightS.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    mLightListener.start();
+                }else{
+                    mLightListener.stop();
+                }
                 lightSensor = isChecked;
                 Intent intent = new Intent();
                 intent.putExtra("lightSensor", lightSensor);
@@ -104,6 +109,11 @@ public class SettingsActivity extends AppCompatActivity {
             lightS.setChecked(lightSensor);
             soundS.setChecked(soundAble);
             vibrations.setChecked(vibrationSensor);
+            if(lightSensor){
+                mLightListener.start();
+            }else{
+                mLightListener.stop();
+            }
 
         }
 
@@ -121,6 +131,7 @@ public class SettingsActivity extends AppCompatActivity {
         TextView lightSwitch = findViewById(R.id.light);
         TextView vibrationSwitch = findViewById(R.id.vibration);
         TextView soundSwitch = findViewById(R.id.sound);
+        Button btnBack = findViewById(R.id.btn_back);
         @Override
         public void ChangeLight(SensorEvent temp) {
             float acc = temp.accuracy;
@@ -128,7 +139,7 @@ public class SettingsActivity extends AppCompatActivity {
             try {
                 if (lux >= 100) {
                     getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    SettingsLayout.setBackgroundResource(R.color.cream_300);
+                    SettingsLayout.setBackgroundResource(R.color.cream_000);
                     lightSwitch.setTextColor(getResources().getColor(R.color.cream_300));
                     vibrationSwitch.setTextColor(getResources().getColor(R.color.cream_300));
                     soundSwitch.setTextColor(getResources().getColor(R.color.cream_300));
