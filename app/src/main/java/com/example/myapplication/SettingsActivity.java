@@ -2,7 +2,7 @@
 
 
 package com.example.myapplication;
-
+import java.util.HashMap;
 import android.content.Intent;
 import android.hardware.SensorEvent;
 import android.os.Bundle;
@@ -11,7 +11,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.Spinner;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -29,22 +33,36 @@ public class SettingsActivity extends AppCompatActivity {
     public boolean soundAble;
     public boolean vibrationSensor;
     public boolean lightSensor;
+    private String[] cupList = new String[]{"bamboo","crystal","diamond","gold","jelly","leaves","marble","normal","ocean","starrynight"};
+    public HashMap<String, Integer> cupImages = new HashMap<String, Integer>();
+    public static int selectedCup = R.drawable.cup_normal;
+
+    private void initCupMap(){
+        cupImages.put("bamboo", R.drawable.cup_bamboo);
+        cupImages.put("crystal",R.drawable.cup_crystal);
+        cupImages.put("diamond", R.drawable.cup_diamond);
+        cupImages.put("gold", R.drawable.cup_gold);
+        cupImages.put("jelly", R.drawable.cup_jelly);
+        cupImages.put("leaves", R.drawable.cup_leaves);
+        cupImages.put("marble", R.drawable.cup_marble);
+        cupImages.put("normal", R.drawable.cup_normal);
+        cupImages.put("ocean", R.drawable.cup_ocean);
+        cupImages.put("starrynight", R.drawable.cup_starrynight);
+
+        Log.i("INIT_CUPMAP","SUCCEED");
+    }
+
+
+    private String currentCup = "normal";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_activity);
-//        if (savedInstanceState == null) {
-//            getSupportFragmentManager()
-//                    .beginTransaction()
-//                    .replace(R.id.settings, new SettingsFragment())
-//                    .commit();
-//        }
-//        ActionBar actionBar = getSupportActionBar();
-//        if (actionBar != null) {
-//            actionBar.setDisplayHomeAsUpEnabled(true);
-//        }
+
+        // InitCupMap
+        initCupMap();
 
         mLightListener = new LightListener(this);
         mLightListener.setOnLightListener(new SettingsActivity.lightChangeListener());
@@ -125,6 +143,32 @@ public class SettingsActivity extends AppCompatActivity {
                     finish();
                 }
         );
+
+        // Confirm Button for Setting Dice Cup texture
+        Button btnConfirm = findViewById(R.id.btn_confirm);
+        btnConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Integer objI = cupImages.get(currentCup);
+                selectedCup = Integer.valueOf(objI);
+                Toast.makeText(SettingsActivity.this, "New Dice Cup Set!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Spinner for setting dice cup
+        Spinner cupSpinner = findViewById(R.id.spinner_dicecup);
+        ArrayAdapter<String> adapter= new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,cupList);//建立Adapter并且绑定数据源
+        cupSpinner.setAdapter(adapter);
+        cupSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                currentCup = cupList[position];
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
     }
     private class lightChangeListener implements LightListener.LightChangeListener {
         ConstraintLayout SettingsLayout = findViewById(R.id.shock);

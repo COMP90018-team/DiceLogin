@@ -67,6 +67,12 @@ public class DiceGameActivity extends AppCompatActivity {
     ArrayList<Integer> imgBlkStartList = new ArrayList<>();
     ArrayList<Integer> imgBlkTopList = new ArrayList<>();
 
+
+    public void updateDiceCup(){
+        ImageView dicecupV = findViewById(R.id.imageDiceCup);
+        dicecupV.setImageResource(SettingsActivity.selectedCup);
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -93,6 +99,7 @@ public class DiceGameActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i("Dice Game","Start!");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dice_game);
 
@@ -117,6 +124,9 @@ public class DiceGameActivity extends AppCompatActivity {
             int imgBlkTop = imgBlkPara.topMargin;
             imgBlkTopList.add(imgBlkTop);
         }
+
+        // Update Dice Cup
+        updateDiceCup();
 
         TextView showNumDices = findViewById(R.id.text_num_dice);
         selectParameter = getIntent().getStringExtra("selectParameter");
@@ -286,9 +296,13 @@ public class DiceGameActivity extends AppCompatActivity {
         public void ChangeLight(SensorEvent temp) {
             float acc = temp.accuracy;
             float lux = temp.values[0];
+            String s = Float.toString(lux);
+            System.out.print("Lux is "+lux);
             try{
                 if (lightSensor) {
+                    Log.i("Lux",s);
                     if (lux >= 100) {
+                        Log.i("Theme","Day");
                         getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                         DiceGameLayout.setBackgroundResource(R.color.cream_000);
                         for (Integer textid : TextBlkList) {
@@ -307,6 +321,7 @@ public class DiceGameActivity extends AppCompatActivity {
 
 
                     } else {
+                        Log.i("Theme","Night");
                         getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                         DiceGameLayout.setBackgroundResource(R.color.blue_700);
                         for (Integer textid : TextBlkList) {

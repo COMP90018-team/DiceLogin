@@ -273,7 +273,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="50dp"
-            android:src="@drawable/gold" />
+            android:src="@drawable/cup_normal" />
 
         <!--        <TextView-->
         <!--            android:id="@+id/shake_instruction"-->
