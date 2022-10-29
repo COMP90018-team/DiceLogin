@@ -159,9 +159,12 @@ public class SettingsActivity extends AppCompatActivity {
         Spinner cupSpinner = findViewById(R.id.spinner_dicecup);
         ArrayAdapter<String> adapter= new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,cupList);//建立Adapter并且绑定数据源
         cupSpinner.setAdapter(adapter);
+        cupSpinner.setSelection(7,true);
+
         cupSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.i("SPINNER POSITION",position+"");
                 currentCup = cupList[position];
             }
             @Override

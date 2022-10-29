@@ -38,12 +38,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener{
     protected void onStart() {
         super.onStart();
         Log.i("test", "Tess onStart: "+Integer.toString(getDelegate().getLocalNightMode()));
-//        if(getDelegate().getLocalNightMode() == AppCompatDelegate.MODE_NIGHT_YES){
-//            if(lightSensor==false){
-//                getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-//                findViewById(R.id.home_layout).setBackgroundResource(R.color.cream_000);
-//            }
-//        }
     }
 
     @Override
