@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">DICE GAME</string>
+    <string name="app_name">DiceAnytime</string>
     <string name="title_text">Rolling Dices!</string>
     <string name="span_text_1_1">Play with </string>
     <string name="span_text_1_2"> Dices</string>
