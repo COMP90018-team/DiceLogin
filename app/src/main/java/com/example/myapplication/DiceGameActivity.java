@@ -301,7 +301,7 @@ public class DiceGameActivity extends AppCompatActivity {
             try{
                 if (lightSensor) {
                     Log.i("Lux",s);
-                    if (lux >= 100) {
+                    if (lux >= 50) {
                         Log.i("Theme","Day");
                         getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                         DiceGameLayout.setBackgroundResource(R.color.cream_000);
@@ -343,22 +343,6 @@ public class DiceGameActivity extends AppCompatActivity {
             } catch(Exception e){
 
             }
-
-
-
-
-
-
-
-//            if lightSensor:
-            //            lightTV.setText("acc:"+acc+";"+"lux："+lux);
-            //            亮度大于100 白天模式 亮度小于100夜间模式
-            //            if lux>100:
-            //
-            //            else:
-
-
-
 
 
         }
