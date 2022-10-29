@@ -4,12 +4,14 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.hardware.SensorEvent;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,7 +39,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener{
     @Override
     protected void onStart() {
         super.onStart();
-        Log.i("test", "Tess onStart: "+Integer.toString(getDelegate().getLocalNightMode()));
+        Log.i("test", "ChangeLight onStart: "+Integer.toString(getDelegate().getLocalNightMode()));
     }
 
     @Override
@@ -87,7 +89,14 @@ public class Home extends AppCompatActivity implements View.OnClickListener{
                         lightSensor = extras.getBoolean("lightSensor");
                         Log.i("INFORMATION", "Tess LightSensor is "+Boolean.toString(lightSensor));
                         if (lightSensor == false){
+
                             mLightListener.stop();
+                                    if(getDelegate().getLocalNightMode() == AppCompatDelegate.MODE_NIGHT_YES){
+                                        if(lightSensor==false){
+                                            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                                            findViewById(R.id.home_layout).setBackgroundResource(R.color.cream_000);
+                                        }
+                                    }
                         }else{
                             mLightListener.start();
                         }
@@ -134,6 +143,11 @@ public class Home extends AppCompatActivity implements View.OnClickListener{
         }
     }
 
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
+
     private class lightChangeListener implements LightListener.LightChangeListener {
         ConstraintLayout HomeLayout = findViewById(R.id.home_layout);
         @Override
@@ -141,7 +155,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener{
             float acc = temp.accuracy;
             float lux = temp.values[0];
             try {
-                    if (lux >= 100) {
+                Log.i("T", "ChangeLight: "+Float.toString(lux));
+                    if (lux >= 50) {
                         getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                         HomeLayout.setBackgroundResource(R.color.cream_000);
 

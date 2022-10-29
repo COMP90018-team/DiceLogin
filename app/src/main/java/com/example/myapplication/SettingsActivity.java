@@ -38,6 +38,7 @@ public class SettingsActivity extends AppCompatActivity {
     public static int selectedCup = R.drawable.cup_normal;
 
     private void initCupMap(){
+        cupImages.put("normal", R.drawable.cup_normal);
         cupImages.put("bamboo", R.drawable.cup_bamboo);
         cupImages.put("crystal",R.drawable.cup_crystal);
         cupImages.put("diamond", R.drawable.cup_diamond);
@@ -45,7 +46,6 @@ public class SettingsActivity extends AppCompatActivity {
         cupImages.put("jelly", R.drawable.cup_jelly);
         cupImages.put("leaves", R.drawable.cup_leaves);
         cupImages.put("marble", R.drawable.cup_marble);
-        cupImages.put("normal", R.drawable.cup_normal);
         cupImages.put("ocean", R.drawable.cup_ocean);
         cupImages.put("starrynight", R.drawable.cup_starrynight);
 
@@ -157,7 +157,9 @@ public class SettingsActivity extends AppCompatActivity {
 
         // Spinner for setting dice cup
         Spinner cupSpinner = findViewById(R.id.spinner_dicecup);
-        ArrayAdapter<String> adapter= new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,cupList);//建立Adapter并且绑定数据源
+        ArrayAdapter<String> adapter= new ArrayAdapter<>(this,R.layout.spinnertext,cupList);//建立Adapter并且绑定数据源
+//        设置下拉样式
+        adapter.setDropDownViewResource(R.layout.spinnertext2);
         cupSpinner.setAdapter(adapter);
         cupSpinner.setSelection(7,true);
 
@@ -171,26 +173,29 @@ public class SettingsActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-
     }
+
     private class lightChangeListener implements LightListener.LightChangeListener {
         ConstraintLayout SettingsLayout = findViewById(R.id.shock);
         TextView lightSwitch = findViewById(R.id.light);
         TextView vibrationSwitch = findViewById(R.id.vibration);
         TextView soundSwitch = findViewById(R.id.sound);
+        TextView cupStyleSwitchTV = findViewById(R.id.styletextview);
+        Spinner stypeSpinner = findViewById(R.id.spinner_dicecup);
         Button btnBack = findViewById(R.id.btn_back);
         @Override
         public void ChangeLight(SensorEvent temp) {
             float acc = temp.accuracy;
             float lux = temp.values[0];
             try {
-                if (lux >= 100) {
+                if (lux >= 50) {
                     getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                     SettingsLayout.setBackgroundResource(R.color.cream_000);
                     lightSwitch.setTextColor(getResources().getColor(R.color.cream_300));
                     vibrationSwitch.setTextColor(getResources().getColor(R.color.cream_300));
                     soundSwitch.setTextColor(getResources().getColor(R.color.cream_300));
-//                   recreate();
+                    cupStyleSwitchTV.setTextColor(getResources().getColor(R.color.cream_300));
+
 
                 } else {
                     getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
@@ -198,6 +203,7 @@ public class SettingsActivity extends AppCompatActivity {
                     lightSwitch.setTextColor(getResources().getColor(R.color.blue_100));
                     vibrationSwitch.setTextColor(getResources().getColor(R.color.blue_100));
                     soundSwitch.setTextColor(getResources().getColor(R.color.blue_100));
+                    cupStyleSwitchTV.setTextColor(getResources().getColor(R.color.blue_100));
 
 //                    recreate();
                 }
