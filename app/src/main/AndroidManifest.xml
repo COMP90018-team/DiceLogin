@@ -27,6 +27,7 @@
         <activity
             android:name=".SettingsActivity"
             android:exported="false"
+            android:configChanges="uiMode"
             android:label="@string/title_activity_settings" />
         <activity
             android:name=".DiceGameActivity"
@@ -34,6 +35,7 @@
 
         <activity
             android:name=".Home"
+            android:configChanges="uiMode"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
