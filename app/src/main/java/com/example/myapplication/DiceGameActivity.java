@@ -284,8 +284,11 @@ public class DiceGameActivity extends AppCompatActivity {
         @Override
         public void ChangeTemperature(float temp) {
 //            temperaturetextView.setText("temperature:" + temp + "℃");
-            Toast.makeText(DiceGameActivity.this, "Temperature is too high.", Toast.LENGTH_SHORT).show();
-        }
+            if(temp >100){
+                Toast.makeText(DiceGameActivity.this, "Temperature is too high.", Toast.LENGTH_SHORT).show();
+
+                }
+            }
     }
 
     //亮度senor接口方法
