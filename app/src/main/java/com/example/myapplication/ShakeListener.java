@@ -8,6 +8,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
 
+//the basic shake listener
 public class ShakeListener implements SensorEventListener {
     String TAG = "ShakeListener";
     // speed threshold
@@ -32,7 +33,7 @@ public class ShakeListener implements SensorEventListener {
 
     // constructor
     public ShakeListener(Context c) {
-        // 获得监听对象
+        // get the monitored context
         mContext = c;
         start();
     }

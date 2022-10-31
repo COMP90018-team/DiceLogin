@@ -17,7 +17,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.w3c.dom.Text;
-
+//this is the login class
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
@@ -46,9 +46,11 @@ public class MainActivity extends AppCompatActivity {
                     account.requestFocus();
                     return;
                 }
+//                sign button click
                 mAuth.signInWithEmailAndPassword(user, key).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+//                        pop window about the state of login
                         if(task.isSuccessful()){
                             // Intent intent = new Intent(getApplication(), nextActivity.class);
                             // startActivity(intent);
@@ -66,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+//        jump to the registor window
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -8,7 +8,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
 
-
+//this is the basic temperature listener
 public class TemperatureListener implements SensorEventListener {
     private SensorManager sensorManager;
     private Sensor sensor;
@@ -17,7 +17,7 @@ public class TemperatureListener implements SensorEventListener {
     private Context mContext;
 
     public TemperatureListener(Context c) {
-        // 获得监听对象
+        // get the monitored context
         mContext = c;
         start();
     }

@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+//this class is used to store the user information
 public class UserInfo {
 
     public String username;

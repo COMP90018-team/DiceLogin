@@ -27,7 +27,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener{
 
     LightListener mLightListener = null;
 
+//    the dice number
     public String[] numList = new String[]{"1","2","3","4","5","6"};
+//    the sensor switch boolean value
     public boolean soundAble = true;
     public boolean vibrationSensor = true;
     public boolean lightSensor = true;
@@ -50,12 +52,13 @@ public class Home extends AppCompatActivity implements View.OnClickListener{
         mLightListener = new LightListener(this);
         mLightListener.setOnLightListener(new Home.lightChangeListener());
 
-        Spinner spinner = findViewById(R.id.spinner_dicenum);//初始化控件
-        ArrayAdapter<String>adapter= new ArrayAdapter<>(this,R.layout.spinnertext,numList);//建立Adapter并且绑定数据源
-//第一个参数表示在哪个Activity上显示，第二个参数是系统下拉框的样式，第三个参数是数组。
+//        build adapter to bind the data source
+        Spinner spinner = findViewById(R.id.spinner_dicenum);
+        ArrayAdapter<String>adapter= new ArrayAdapter<>(this,R.layout.spinnertext,numList);
+
         adapter.setDropDownViewResource(R.layout.spinnertext2);
-        spinner.setAdapter(adapter);//绑定Adapter到控件
-        //监听spinner选中的参数并赋值，通过intent进行传参至下一个页面
+        spinner.setAdapter(adapter);
+//        use intent to transport the data
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -73,7 +76,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener{
         Button settingButton = (Button) findViewById(R.id.setting_btn);
         settingButton.setOnClickListener(this);
 
-
+// result call back to change the sensor switch value
         someActivityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -115,7 +118,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener{
 
     }
 
-
+//click button to the different activity window
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -149,6 +152,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener{
         super.onConfigurationChanged(newConfig);
     }
 
+//    light sensor implement interface
     private class lightChangeListener implements LightListener.LightChangeListener {
         ConstraintLayout HomeLayout = findViewById(R.id.home_layout);
         @Override
@@ -161,13 +165,11 @@ public class Home extends AppCompatActivity implements View.OnClickListener{
                         getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                         HomeLayout.setBackgroundResource(R.color.cream_000);
 
-//                   recreate();
 
                     } else {
                         getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                         HomeLayout.setBackgroundResource(R.color.blue_700);
 
-//                    recreate();
                     }
             } catch (Exception e) {
             }

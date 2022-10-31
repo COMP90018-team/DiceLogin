@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+//this is the Dice Cup class it can contain less than 6 dice in the cup
 public class DiceCup {
 
     // Attributes
@@ -77,6 +78,9 @@ public class DiceCup {
         return topList;
     }
 
+
+//    get the dices results
+
     public ArrayList<Integer> getResultList() {
         ArrayList<Integer> resultList = new ArrayList<Integer>();
         for(int i=0; i<this.numberOfDice; i++){
@@ -86,6 +90,7 @@ public class DiceCup {
         return resultList;
     }
 
+//    get the dices results map
     public Map<String, Integer> getResultMap() {
         Map<String, Integer> resultMap = new HashMap<String, Integer>();
         resultMap.put("Empty",0);

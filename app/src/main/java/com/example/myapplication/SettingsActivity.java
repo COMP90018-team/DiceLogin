@@ -27,16 +27,18 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+// this is the setting page class
 public class SettingsActivity extends AppCompatActivity {
     LightListener mLightListener = null;
-
+// sensor switch boolean value
     public boolean soundAble;
     public boolean vibrationSensor;
     public boolean lightSensor;
+//    the cup type list
     private String[] cupList = new String[]{"bamboo","crystal","diamond","gold","jelly","leaves","marble","normal","ocean","starrynight"};
+//    map the cup type to cup image
     public HashMap<String, Integer> cupImages = new HashMap<String, Integer>();
     public static int selectedCup = R.drawable.cup_normal;
-
     private void initCupMap(){
         cupImages.put("normal", R.drawable.cup_normal);
         cupImages.put("bamboo", R.drawable.cup_bamboo);
@@ -52,7 +54,7 @@ public class SettingsActivity extends AppCompatActivity {
         Log.i("INIT_CUPMAP","SUCCEED");
     }
 
-
+// current cup type
     private String currentCup = "normal";
 
 
@@ -67,7 +69,7 @@ public class SettingsActivity extends AppCompatActivity {
         mLightListener = new LightListener(this);
         mLightListener.setOnLightListener(new SettingsActivity.lightChangeListener());
 
-        //光感开关检查
+        //light sensor switch
         Switch lightS = findViewById(R.id.light);
         lightS.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -78,6 +80,7 @@ public class SettingsActivity extends AppCompatActivity {
                     mLightListener.stop();
                 }
                 lightSensor = isChecked;
+//               return the setting information by intent
                 Intent intent = new Intent();
                 intent.putExtra("lightSensor", lightSensor);
                 intent.putExtra("vibrationSensor", vibrationSensor);
@@ -87,12 +90,13 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
-        //声感开关检查
+        //sound switch button
         Switch soundS = findViewById(R.id.sound);
         soundS.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 soundAble = isChecked;
+//                return the setting information by intent
                 Log.i("TEST", "Testing the sound now is " + Boolean.toString(soundAble));
                 Intent intent = new Intent();
                 intent.putExtra("lightSensor", lightSensor);
@@ -103,12 +107,13 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
-        //声感开关检查
+        //sound switch button
         Switch vibrations = findViewById(R.id.vibration);
         vibrations.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 vibrationSensor = isChecked;
+//                return the setting information by intent
                 Intent intent = new Intent();
                 intent.putExtra("lightSensor", lightSensor);
                 intent.putExtra("vibrationSensor", vibrationSensor);
@@ -136,7 +141,7 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
 
-        // 返回按钮
+        // return button
         Button btnBack = findViewById(R.id.btn_back);
         btnBack.setOnClickListener(v ->
                 {
@@ -158,11 +163,11 @@ public class SettingsActivity extends AppCompatActivity {
         // Spinner for setting dice cup
         Spinner cupSpinner = findViewById(R.id.spinner_dicecup);
         ArrayAdapter<String> adapter= new ArrayAdapter<>(this,R.layout.spinnertext,cupList);//建立Adapter并且绑定数据源
-//        设置下拉样式
+//       set the dropdown style
         adapter.setDropDownViewResource(R.layout.spinnertext2);
         cupSpinner.setAdapter(adapter);
         cupSpinner.setSelection(7,true);
-
+// click on the drop down window
         cupSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -175,6 +180,7 @@ public class SettingsActivity extends AppCompatActivity {
         });
     }
 
+//    light sensor implement interface
     private class lightChangeListener implements LightListener.LightChangeListener {
         ConstraintLayout SettingsLayout = findViewById(R.id.shock);
         TextView lightSwitch = findViewById(R.id.light);
@@ -187,6 +193,7 @@ public class SettingsActivity extends AppCompatActivity {
         public void ChangeLight(SensorEvent temp) {
             float acc = temp.accuracy;
             float lux = temp.values[0];
+//            change the background color and text color
             try {
                 if (lux >= 50) {
                     getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);

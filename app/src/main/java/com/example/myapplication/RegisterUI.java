@@ -60,7 +60,7 @@ public class RegisterUI extends AppCompatActivity {
                 String usernameAdd = username.getText().toString().trim();
                 String emailAdd = email.getText().toString().trim();
                 String passwordAdd = password.getText().toString().trim();
-
+//    pop alarm information if the password or address is error structure
                 if(usernameAdd.equals("")||emailAdd.equals("")||passwordAdd.equals("")){
                     Toast.makeText(RegisterUI.this,"All fields required.", Toast.LENGTH_SHORT).show();
                     username.requestFocus();
@@ -72,6 +72,7 @@ public class RegisterUI extends AppCompatActivity {
                     Toast.makeText(RegisterUI.this,"Please enter a no less than 6 digit password.", Toast.LENGTH_SHORT).show();
                     return;
                 }
+//                send the user information to the fire base
                 mAuth.createUserWithEmailAndPassword(emailAdd, passwordAdd).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
