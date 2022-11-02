@@ -20,7 +20,9 @@ import org.w3c.dom.Text;
 //this is the login class
 public class MainActivity extends AppCompatActivity {
 
+    // cited from google firebase open source code
     private FirebaseAuth mAuth;
+    
     EditText account, password;
     Button login, register;
 
@@ -29,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // cited from google firebase open source code 
         mAuth = FirebaseAuth.getInstance();
 
         account = (EditText) findViewById(R.id.account);
@@ -47,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
 //                sign button click
+                // cited from google firebase open source code 
                 mAuth.signInWithEmailAndPassword(user, key).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
