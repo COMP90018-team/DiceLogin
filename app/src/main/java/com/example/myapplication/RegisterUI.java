@@ -72,7 +72,8 @@ public class RegisterUI extends AppCompatActivity {
                     Toast.makeText(RegisterUI.this,"Please enter a no less than 6 digit password.", Toast.LENGTH_SHORT).show();
                     return;
                 }
-//                send the user information to the fire base
+//                send the user information to the firebase
+                // cited from google firebase open source code 
                 mAuth.createUserWithEmailAndPassword(emailAdd, passwordAdd).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
