@@ -35,3 +35,6 @@
 |YANBO WANG  | 1261381   |yanbow3@student.unimelb.edu.au |
 |JUNJIE ZENG | 1289996   |junjzeng@student.unimelb.edu.au|
 |Yanlin ZHU  | 1222280   |yanzhu2@student.unimelb.edu.au|
+
+### Reference
+[DiceImages](https://github.com/udacity/andfun-kotlin-dice-roller/raw/master/DiceImages.zip)
